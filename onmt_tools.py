@@ -30,11 +30,12 @@ def average_models(model_files, output, fp32=False):
             avg_model = model_weights
             avg_generator = generator_weights
         else:
+            # Not in place: tied embeddings share one tensor across keys
             for (k, v) in avg_model.items():
-                avg_model[k].mul_(i).add_(model_weights[k]).div_(i + 1)
+                avg_model[k] = v.mul(i).add(model_weights[k]).div(i + 1)
 
             for (k, v) in avg_generator.items():
-                avg_generator[k].mul_(i).add_(generator_weights[k]).div_(i + 1)
+                avg_generator[k] = v.mul(i).add(generator_weights[k]).div(i + 1)
 
     final = {"vocab": vocab, "opt": opt, "optim": None,
              "generator": avg_generator, "model": avg_model}

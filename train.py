@@ -417,8 +417,8 @@ if not os.path.isfile(onmt_vocab_file):
 
 last_checkpoint = os.path.join(onmt_dir, os.path.basename(onmt_config["save_model"]) + f'_step_{onmt_config["train_steps"]}.pt')
 def get_checkpoints():
-    chkpts = [cp for cp in glob.glob(os.path.join(onmt_dir, "*.pt")) if "averaged.pt" not in cp]
-    return list(sorted(chkpts, key=lambda x: int(re.findall(r'\d+', x)[0])))
+    chkpts = glob.glob(os.path.join(onmt_dir, "*_step_*.pt"))
+    return sorted(chkpts, key=lambda x: int(re.search(r'_step_(\d+)\.pt$', x).group(1)))
 
 if (not (os.path.isfile(last_checkpoint) or args.inflight)) or changed or args.rerun_onmt:
     cmd = ["onmt_train", "-config", onmt_config_path]

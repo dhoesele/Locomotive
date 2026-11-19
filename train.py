@@ -311,8 +311,9 @@ onmt_config = {
     'save_data': rel_onmt_dir,
     'src_vocab': f"{rel_onmt_dir}/openmt.vocab",
     'tgt_vocab': f"{rel_onmt_dir}/openmt.vocab",
-    'src_vocab_size': config.get('vocab_size', 50000),
-    'tgt_vocab_size': config.get('vocab_size', 50000),
+    # +1: ONMT adds <blank>, which is not in the SentencePiece vocab
+    'src_vocab_size': config.get('vocab_size', 50000) + 1,
+    'tgt_vocab_size': config.get('vocab_size', 50000) + 1,
     'share_vocab': True, 
     'data': corpora, 
     'src_subword_type': 'sentencepiece',
